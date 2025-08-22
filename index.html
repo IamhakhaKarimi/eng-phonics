@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phonics Fun - Digraphs & Trigraphs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            color: #2d3748;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #4a5568;
+            margin-bottom: 20px;
+        }
+
+        .controls-container {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .dropdown-container {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            flex: 1;
+            min-width: 250px;
+            max-width: 400px;
+        }
+
+        .name-picker-container {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            flex: 2;
+            min-width: 500px;
+        }
+
+        .dropdown-label, .name-picker-label {
+            font-size: 1.3rem;
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .dropdown-column {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        select {
+            font-size: 1.2rem;
+            padding: 12px 20px;
+            border: 3px solid #4299e1;
+            border-radius: 15px;
+            background: white;
+            color: #2d3748;
+            cursor: pointer;
+            flex: 1;
+            font-family: inherit;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3);
+        }
+
+        .random-sound-button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            white-space: nowrap;
+            width: 100%;
+        }
+
+        .random-sound-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .name-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px;
+            border: 3px solid #4299e1;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-family: 'Quicksand', sans-serif;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+
+        .name-input:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3);
+        }
+
+        .pick-student-button {
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #10ac84 0%, #00d2d3 100%);
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            margin-bottom: 15px;
+        }
+
+        .pick-student-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 172, 132, 0.4);
+        }
+
+        .selected-student {
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            font-family: 'Quicksand', sans-serif;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.5s ease;
+        }
+
+        .rolling-animation {
+            animation: roll 2.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes roll {
+            0% { 
+                transform: translateY(0) scale(1) rotateX(0deg);
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            }
+            20% { 
+                transform: translateY(-15px) scale(1.05) rotateX(10deg);
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                box-shadow: 0 8px 25px rgba(240, 147, 251, 0.6);
+            }
+            40% { 
+                transform: translateY(8px) scale(0.95) rotateX(-5deg);
+                background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+                box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
+            }
+            60% { 
+                transform: translateY(-8px) scale(1.02) rotateX(8deg);
+                background: linear-gradient(135deg, #10ac84 0%, #00d2d3 100%);
+                box-shadow: 0 10px 30px rgba(16, 172, 132, 0.6);
+            }
+            80% { 
+                transform: translateY(3px) scale(0.98) rotateX(-3deg);
+                background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+                box-shadow: 0 5px 18px rgba(255, 216, 155, 0.5);
+            }
+            100% { 
+                transform: translateY(0) scale(1) rotateX(0deg);
+                background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+                box-shadow: 0 8px 25px rgba(46, 204, 113, 0.4);
+            }
+        }
+
+        .final-selection {
+            animation: finalGlow 1s ease-out;
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%) !important;
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(46, 204, 113, 0.8), 0 0 60px rgba(46, 204, 113, 0.4) !important;
+        }
+
+        @keyframes finalGlow {
+            0% { 
+                transform: scale(1.1);
+                box-shadow: 0 0 40px rgba(46, 204, 113, 1);
+            }
+            50% { 
+                transform: scale(1.15);
+                box-shadow: 0 0 50px rgba(46, 204, 113, 0.9);
+            }
+            100% { 
+                transform: scale(1.05);
+                box-shadow: 0 0 30px rgba(46, 204, 113, 0.8), 0 0 60px rgba(46, 204, 113, 0.4);
+            }
+        }
+
+        .word-display {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .word {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 20px;
+            letter-spacing: 8px;
+            text-transform: lowercase;
+        }
+
+        .phoneme-indicators {
+            font-size: 2rem;
+            color: #e53e3e;
+            letter-spacing: 8px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .instruction {
+            font-size: 1.1rem;
+            color: #718096;
+            font-style: italic;
+            margin-top: 20px;
+        }
+
+        .sound-highlight {
+            background: linear-gradient(120deg, #ffd89b 0%, #19547b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        .action-button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .shuffle-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .shuffle-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .pronounce-button {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);
+        }
+
+        .pronounce-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(240, 147, 251, 0.6);
+        }
+
+        .button-disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .word {
+                font-size: 2.5rem;
+                letter-spacing: 4px;
+            }
+            
+            .phoneme-indicators {
+                font-size: 1.5rem;
+                letter-spacing: 4px;
+            }
+            
+            select {
+                min-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="title">🎵 Phonics Fun! 🎵</h1>
+        <p class="subtitle">Learn digraphs and trigraphs with visual phoneme markers</p>
+    </div>
+
+    <div class="controls-container">
+        <div class="dropdown-container">
+            <label class="dropdown-label" for="soundSelect">Choose a sound:</label>
+            <div class="dropdown-column">
+                <select id="soundSelect">
+                    <option value="">Select digraphs...</option>
+                    <option value="sh">sh</option>
+                    <option value="ch">ch</option>
+                    <option value="th">th</option>
+                    <option value="wh">wh</option>
+                    <option value="ph">ph</option>
+                    <option value="ng">ng</option>
+                    <option value="ck">ck</option>
+                    <option value="kn">kn</option>
+                    <option value="wr">wr</option>
+                    <option value="ai">ai</option>
+                    <option value="ay">ay</option>
+                    <option value="ee">ee</option>
+                    <option value="ea_long">ea (long)</option>
+                    <option value="ea_short">ea (short)</option>
+                    <option value="ie">ie</option>
+                    <option value="ei">ei</option>
+                    <option value="ey">ey</option>
+                    <option value="oa">oa</option>
+                    <option value="ow_long">ow (long)</option>
+                    <option value="ow_short">ow (short)</option>
+                    <option value="ou_short">ou (short)</option>
+                    <option value="ou_schwa">ou (schwa)</option>
+                    <option value="oo_long">oo (long)</option>
+                    <option value="oo_short">oo (short)</option>
+                    <option value="ue">ue</option>
+                    <option value="ui">ui</option>
+                    <option value="au">au</option>
+                    <option value="aw">aw</option>
+                    <option value="oi">oi</option>
+                    <option value="oy">oy</option>
+                    <option value="eu">eu</option>
+                    <option value="ew">ew</option>
+                    <option value="tch">tch</option>
+                    <option value="dge">dge</option>
+                    <option value="igh">igh</option>
+                    <option value="eigh">eigh</option>
+                    <option value="ough_though">ough (as in 'though')</option>
+                    <option value="ough_cough">ough (as in 'cough')</option>
+                    <option value="augh_caught">augh (as in 'caught')</option>
+                    <option value="augh_laugh">augh (as in 'laugh')</option>
+                    <option value="ought">ought</option>
+                    <option value="ight">ight</option>
+                    <option value="ear_hear">ear (as in 'hear')</option>
+                    <option value="ear_earth">ear (as in 'earth')</option>
+                    <option value="eir">eir</option>
+                    <option value="air">air</option>
+                    <option value="are">are</option>
+                    <option value="ore">ore</option>
+                    <option value="ure">ure</option>
+                    <option value="ieu">ieu</option>
+                </select>
+                <button class="random-sound-button" id="randomSoundButton">🎲 Random Sound</button>
+            </div>
+        </div>
+
+        <div class="name-picker-container">
+            <label class="name-picker-label" for="nameInput">Student Names:</label>
+            <textarea 
+                id="nameInput" 
+                class="name-input" 
+                placeholder="Enter student names, one per line:&#10;Emma&#10;Liam&#10;Sophia&#10;Noah&#10;Olivia"
+            ></textarea>
+            <button class="pick-student-button" id="pickStudentButton">🎯 Pick a Student</button>
+            <div class="selected-student" id="selectedStudent">
+                Enter names above and click "Pick a Student"
+            </div>
+        </div>
+    </div>
+
+    <div class="word-display">
+        <div class="word" id="wordDisplay">Choose a sound above! 👆</div>
+        <div class="phoneme-indicators" id="phonemeDisplay"></div>
+        <div class="instruction" id="instructionText">Select a digraph or trigraph to see a word and its phoneme breakdown</div>
+        <div class="button-container">
+            <button class="action-button shuffle-button button-disabled" id="shuffleButton">
+                🔀 New Word
+            </button>
+            <button class="action-button pronounce-button button-disabled" id="pronounceButton">
+                🔊 Say Word
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Multiple word options for each sound
+        const wordMap = {
+            'sh': ['ship', 'shop', 'fish', 'wash', 'shell'],
+            'ch': ['chair', 'chip', 'much', 'lunch', 'cheese'],
+            'th': ['bath', 'think', 'three', 'tooth', 'thumb'],
+            'wh': ['whale', 'wheel', 'white', 'when', 'where'],
+            'ph': ['phone', 'photo', 'graph', 'laugh', 'elephant'],
+            'ng': ['ring', 'sing', 'long', 'king', 'strong'],
+            'ck': ['duck', 'back', 'rock', 'quick', 'truck'],
+            'kn': ['knee', 'know', 'knife', 'knock', 'knot'],
+            'wr': ['wrap', 'write', 'wrong', 'wrist', 'wreck'],
+            'ai': ['rain', 'mail', 'pain', 'train', 'brain'],
+            'ay': ['day', 'play', 'say', 'way', 'may'],
+            'ee': ['see', 'tree', 'meet', 'bee', 'green'],
+            'ea_long': ['eat', 'sea', 'read', 'leaf', 'beach'],
+            'ea_short': ['head', 'bread', 'ready', 'heavy', 'weather'],
+            'ie': ['pie', 'die', 'tie', 'lie', 'cries'],
+            'ei': ['eight', 'vein', 'neighbor', 'weigh', 'sleigh'],
+            'ey': ['they', 'grey', 'key', 'honey', 'money'],
+            'oa': ['boat', 'coat', 'soap', 'road', 'goat'],
+            'ow_long': ['snow', 'know', 'grow', 'show', 'blow'],
+            'ow_short': ['cow', 'town', 'now', 'brown', 'down'],
+            'ou_short': ['out', 'house', 'shout', 'loud', 'cloud'],
+            'ou_schwa': ['cousin', 'double', 'trouble', 'country', 'young'],
+            'oo_long': ['moon', 'food', 'boot', 'cool', 'school'],
+            'oo_short': ['book', 'foot', 'look', 'good', 'wood'],
+            'ue': ['blue', 'true', 'clue', 'glue', 'value'],
+            'ui': ['fruit', 'suit', 'juice', 'build', 'guitar'],
+            'au': ['caught', 'author', 'fault', 'sauce', 'because'],
+            'aw': ['saw', 'law', 'draw', 'paw', 'straw'],
+            'oi': ['coin', 'oil', 'soil', 'boil', 'point'],
+            'oy': ['boy', 'toy', 'enjoy', 'royal', 'destroy'],
+            'eu': ['feud', 'neutral', 'Europe', 'pneumonia', 'sleuth'],
+            'ew': ['few', 'new', 'grew', 'threw', 'screw'],
+            'tch': ['catch', 'match', 'switch', 'watch', 'kitchen'],
+            'dge': ['badge', 'edge', 'bridge', 'judge', 'fridge'],
+            'igh': ['high', 'light', 'night', 'right', 'bright'],
+            'eigh': ['eight', 'weigh', 'neighbor', 'sleigh', 'freight'],
+            'ough_though': ['though', 'dough', 'thorough', 'borough', 'furlough'],
+            'ough_cough': ['cough', 'rough', 'tough', 'enough', 'trough'],
+            'augh_caught': ['caught', 'taught', 'daughter', 'naughty', 'slaughter'],
+            'augh_laugh': ['laugh', 'laughter', 'draught', 'staff', 'half'],
+            'ought': ['thought', 'bought', 'brought', 'fought', 'sought'],
+            'ight': ['night', 'light', 'fight', 'sight', 'flight'],
+            'ear_hear': ['hear', 'clear', 'dear', 'fear', 'year'],
+            'ear_earth': ['earth', 'learn', 'search', 'heard', 'pearl'],
+            'eir': ['their', 'heir', 'weird', 'seize', 'receive'],
+            'air': ['hair', 'fair', 'pair', 'chair', 'stair'],
+            'are': ['care', 'share', 'dare', 'square', 'prepare'],
+            'ore': ['more', 'store', 'shore', 'before', 'explore'],
+            'ure': ['pure', 'sure', 'cure', 'nature', 'picture'],
+            'ieu': ['adieu', 'lieu', 'milieu', 'queue', 'view']
+        };
+
+        // Keep track of current word index for each sound
+        let currentWordIndex = {};
+
+        // All digraphs and trigraphs for recognition
+        const sounds = ['sh', 'ch', 'th', 'wh', 'ph', 'ng', 'ck', 'kn', 'wr', 'ai', 'ay', 'ee', 'ea', 'ie', 'ei', 'ey', 'oa', 'ow', 'ou', 'oo', 'ue', 'ui', 'au', 'aw', 'oi', 'oy', 'eu', 'ew', 'tch', 'dge', 'igh', 'eigh', 'ough', 'augh', 'ought', 'ight', 'ear', 'eir', 'air', 'are', 'ore', 'ure', 'ieu'];
+
+        function generatePhonemeMarkers(word, targetSound) {
+            let markers = '';
+            let i = 0;
+            
+            // Clean target sound for matching
+            let cleanTargetSound = targetSound.replace('_though', '').replace('_cough', '');
+            
+            while (i < word.length) {
+                let found = false;
+                
+                // Check for trigraphs first (longest matches first)
+                for (let len = 4; len >= 2; len--) {
+                    if (i + len <= word.length) {
+                        let substring = word.substring(i, i + len);
+                        if (sounds.includes(substring) || substring === cleanTargetSound) {
+                            // Add dashes for digraph/trigraph
+                            for (let j = 0; j < len; j++) {
+                                markers += '–';
+                            }
+                            markers += ' ';
+                            i += len;
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                
+                // If no digraph/trigraph found, add dot for single letter
+                if (!found) {
+                    markers += '• ';
+                    i++;
+                }
+            }
+            
+            return markers.trim();
+        }
+
+        let currentSound = '';
+
+        function getRandomWord(selectedSound) {
+            if (!wordMap[selectedSound]) return null;
+            
+            const words = wordMap[selectedSound];
+            if (!currentWordIndex[selectedSound]) {
+                currentWordIndex[selectedSound] = 0;
+            }
+            
+            // Get current word and increment index
+            const word = words[currentWordIndex[selectedSound]];
+            currentWordIndex[selectedSound] = (currentWordIndex[selectedSound] + 1) % words.length;
+            
+            return word;
+        }
+
+        function shuffleWord() {
+            if (!currentSound) return;
+            displayWord(currentSound, true);
+        }
+
+        function pronounceWord() {
+            const wordDisplay = document.getElementById('wordDisplay');
+            const word = wordDisplay.textContent;
+            
+            if (word && word !== 'Choose a sound above! 👆') {
+                // Use Web Speech API to pronounce the word
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(word);
+                    utterance.rate = 0.8;
+                    utterance.pitch = 1.1;
+                    utterance.volume = 1;
+                    speechSynthesis.speak(utterance);
+                }
+            }
+        }
+
+        function updateButtonStates(hasWord) {
+            const shuffleButton = document.getElementById('shuffleButton');
+            const pronounceButton = document.getElementById('pronounceButton');
+            
+            if (hasWord) {
+                shuffleButton.classList.remove('button-disabled');
+                pronounceButton.classList.remove('button-disabled');
+            } else {
+                shuffleButton.classList.add('button-disabled');
+                pronounceButton.classList.add('button-disabled');
+            }
+        }
+
+        function displayWord(selectedSound, isShuffling = false) {
+            const wordDisplay = document.getElementById('wordDisplay');
+            const phonemeDisplay = document.getElementById('phonemeDisplay');
+            const instructionText = document.getElementById('instructionText');
+            
+            if (!selectedSound || !wordMap[selectedSound]) {
+                wordDisplay.textContent = 'Choose a sound above! 👆';
+                phonemeDisplay.textContent = '';
+                instructionText.textContent = 'Select a digraph or trigraph to see a word and its phoneme breakdown';
+                updateButtonStates(false);
+                currentSound = '';
+                return;
+            }
+            
+            currentSound = selectedSound;
+            
+            // If not shuffling and this is a new sound, reset the word index
+            if (!isShuffling) {
+                currentWordIndex[selectedSound] = 0;
+            }
+            
+            const word = getRandomWord(selectedSound);
+            const markers = generatePhonemeMarkers(word, selectedSound);
+            
+            wordDisplay.textContent = word;
+            phonemeDisplay.textContent = markers;
+            
+            // Update instruction with the selected sound
+            let soundDisplay = selectedSound
+                .replace('_though', ' (as in "though")')
+                .replace('_cough', ' (as in "cough")')
+                .replace('_long', ' (long)')
+                .replace('_short', ' (short)')
+                .replace('_schwa', ' (schwa)')
+                .replace('_caught', ' (as in "caught")')
+                .replace('_laugh', ' (as in "laugh")')
+                .replace('_hear', ' (as in "hear")')
+                .replace('_earth', ' (as in "earth")');
+            instructionText.innerHTML = `The word "<span class="sound-highlight">${word}</span>" contains the sound "<span class="sound-highlight">${soundDisplay}</span>"`;
+            
+            updateButtonStates(true);
+        }
+
+        // Get all available sounds for random selection
+        const allSounds = ['sh', 'ch', 'th', 'wh', 'ph', 'ng', 'ck', 'kn', 'wr', 'ai', 'ay', 'ee', 'ea_long', 'ea_short', 'ie', 'ei', 'ey', 'oa', 'ow_long', 'ow_short', 'ou_short', 'ou_schwa', 'oo_long', 'oo_short', 'ue', 'ui', 'au', 'aw', 'oi', 'oy', 'eu', 'ew', 'tch', 'dge', 'igh', 'eigh', 'ough_though', 'ough_cough', 'augh_caught', 'augh_laugh', 'ought', 'ight', 'ear_hear', 'ear_earth', 'eir', 'air', 'are', 'ore', 'ure', 'ieu'];
+
+        function selectRandomSound() {
+            const randomIndex = Math.floor(Math.random() * allSounds.length);
+            const randomSound = allSounds[randomIndex];
+            
+            // Update the dropdown
+            document.getElementById('soundSelect').value = randomSound;
+            
+            // Display the word for the random sound
+            displayWord(randomSound);
+        }
+
+        function pickRandomStudent() {
+            const nameInput = document.getElementById('nameInput');
+            const selectedStudentDiv = document.getElementById('selectedStudent');
+            
+            const names = nameInput.value.trim().split('\n').filter(name => name.trim() !== '');
+            
+            if (names.length === 0) {
+                selectedStudentDiv.textContent = 'Please enter some student names first!';
+                return;
+            }
+            
+            // Reset any existing classes
+            selectedStudentDiv.classList.remove('final-selection');
+            
+            // Add rolling animation
+            selectedStudentDiv.classList.add('rolling-animation');
+            
+            // Show rolling effect with random names
+            let rollCount = 0;
+            const totalRolls = 12;
+            const rollInterval = setInterval(() => {
+                const randomIndex = Math.floor(Math.random() * names.length);
+                selectedStudentDiv.textContent = names[randomIndex].trim();
+                rollCount++;
+                
+                if (rollCount >= totalRolls) {
+                    clearInterval(rollInterval);
+                    
+                    // Final selection after animation completes
+                    setTimeout(() => {
+                        const finalIndex = Math.floor(Math.random() * names.length);
+                        const selectedName = names[finalIndex].trim();
+                        selectedStudentDiv.textContent = `✨ ${selectedName} ✨`;
+                        
+                        // Remove rolling animation and add final selection effect
+                        selectedStudentDiv.classList.remove('rolling-animation');
+                        selectedStudentDiv.classList.add('final-selection');
+                        
+                        // Remove final selection class after glow animation
+                        setTimeout(() => {
+                            selectedStudentDiv.classList.remove('final-selection');
+                        }, 1000);
+                    }, 100);
+                }
+            }, 180);
+        }
+
+        // Event listener for dropdown changes
+        document.getElementById('soundSelect').addEventListener('change', function() {
+            displayWord(this.value);
+        });
+
+        // Event listeners for buttons
+        document.getElementById('shuffleButton').addEventListener('click', function() {
+            if (!this.classList.contains('button-disabled')) {
+                shuffleWord();
+            }
+        });
+
+        document.getElementById('pronounceButton').addEventListener('click', function() {
+            if (!this.classList.contains('button-disabled')) {
+                pronounceWord();
+            }
+        });
+
+        // Event listener for random sound button
+        document.getElementById('randomSoundButton').addEventListener('click', function() {
+            selectRandomSound();
+        });
+
+        // Event listener for pick student button
+        document.getElementById('pickStudentButton').addEventListener('click', function() {
+            pickRandomStudent();
+        });
+
+        // Initialize with empty state
+        displayWord('');
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97326050715ce32e',t:'MTc1NTg2NTc3MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
